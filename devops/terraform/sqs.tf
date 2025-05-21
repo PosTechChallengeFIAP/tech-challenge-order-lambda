@@ -1,7 +1,3 @@
-resource "aws_sqs_queue" "payment_queue" {
-  name = "payment-sqs-queue"
-}
-
-resource "aws_sqs_queue" "payment_queue_dlq" {
-  name = "payment-sqs-queue-dlq"
+resource "aws_sqs_queue" "order_queue" {
+  name = "order-sqs-queue"
 }
