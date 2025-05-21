@@ -2,6 +2,7 @@ import { Context, SQSEvent } from "aws-lambda";
 import { Router } from "./controllers/router";
 import { Logger } from "./infra/utils/logger";
 import { OrderCreatedFactory } from "./factories/OrderCreatedFactory";
+import { OrderPaidController } from "./controllers/order.paid.controller";
 
 enum EOrderRoutes {
     ORDER_CREATED = 'proccess.order.created',
@@ -18,9 +19,11 @@ export class OrderLambda {
         const { type, data } = body;
 
         const orderCreatedController = OrderCreatedFactory.create()
+        const orderPaidController = new OrderPaidController()
 
         const router = new Router();
         router.use(EOrderRoutes.ORDER_CREATED,orderCreatedController.execute.bind(orderCreatedController));
+        router.use(EOrderRoutes.ORDER_PAID, orderPaidController.execute.bind(orderPaidController));
 
         const response = await router.execute(type, data);
         Logger.info('OrderLambda.handler', 'end', response);
