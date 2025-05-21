@@ -1,14 +1,9 @@
+import { IOrder } from "../model/order.interface";
 import { IOrderCreatedUseCase } from "../usecase/order/order-created/order-created.usecase";
 import { IController } from "./controller";
 import { HandlerResponse } from "./router";
 
-type TOrderCreatedController = {
-    orderId: number
-    items: {
-        productId: number,
-        quantity: number
-    }[]
-}
+type TOrderCreatedController = IOrder;
 
 export class OrderCreatedController implements IController<TOrderCreatedController> {
     constructor(
