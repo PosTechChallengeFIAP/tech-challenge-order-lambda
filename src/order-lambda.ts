@@ -1,12 +1,12 @@
 import { Context, SQSEvent } from "aws-lambda";
 import { Router } from "./controllers/router";
-import { OrderController } from "./controllers/order.controller";
-import { Logger } from "./utils/logger";
-import { OrderUseCase } from "./usecase/order/order.usecase";
-import { execSync } from "child_process";
+import { Logger } from "./infra/utils/logger";
+import { OrderCreatedFactory } from "./factories/OrderCreatedFactory";
 
 enum EOrderRoutes {
-    PAYMENT = 'payment.lambda',
+    ORDER_CREATED = 'proccess.order.created',
+    ORDER_PAID = 'proccess.order.paid',
+    ORDER_QUEUED = 'proccess.order.queued'
 }
 
 export class OrderLambda {
@@ -17,11 +17,10 @@ export class OrderLambda {
         const body = JSON.parse(record.body);
         const { type, data } = body;
 
-        const paymentUseCase = new OrderUseCase();
-        const paymentController = new OrderController(paymentUseCase);
+        const orderCreatedController = OrderCreatedFactory.create()
 
         const router = new Router();
-        router.use(EOrderRoutes.PAYMENT,paymentController.execute.bind(paymentController));
+        router.use(EOrderRoutes.ORDER_CREATED,orderCreatedController.execute.bind(orderCreatedController));
 
         const response = await router.execute(type, data);
         Logger.info('OrderLambda.handler', 'end', response);

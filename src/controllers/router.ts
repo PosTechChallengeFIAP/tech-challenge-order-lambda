@@ -1,4 +1,4 @@
-import { Logger } from "../utils/logger";
+import { Logger } from "../infra/utils/logger";
 
 export type HandlerResponse = {
     statusCode: number;
