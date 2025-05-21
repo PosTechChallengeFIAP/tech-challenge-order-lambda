@@ -1,0 +1,23 @@
+{
+  "name": "tech-challenge-lambda-payment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/axios": "^0.9.36",
+    "@types/node": "^22.13.10",
+    "@types/winston": "^2.4.4",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "winston": "^3.17.0"
+  }
+}
