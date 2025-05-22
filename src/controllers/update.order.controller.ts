@@ -1,3 +1,4 @@
+import { Logger } from "../infra/utils/logger";
 import { EOrderStatus } from "../model/order-status.enum";
 import { IPayment } from "../model/payment.interface";
 import { IUpdateOrderUseCase, UpdateOrderUseCase } from "../usecase/order/update-order/update-order.usecase";
@@ -15,6 +16,8 @@ export class UpdateOrderController implements IController<TUpdateOrderController
     ) {}
 
     async execute(request: TUpdateOrderController): Promise<HandlerResponse> {
+        Logger.info("UpdateOrderController.execute executed!");
+        Logger.info("UpdateOrderController.execute executed!", JSON.stringify(request));
         await this.updateOrderUseCase.execute(request);
         return {
             statusCode: 200,

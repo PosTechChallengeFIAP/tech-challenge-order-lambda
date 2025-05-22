@@ -1,3 +1,4 @@
+import { Logger } from "../infra/utils/logger";
 import { IPayment } from "../model/payment.interface";
 import { IOrderPaidUseCase, OrderPaidUseCase } from "../usecase/order/order-paid/order-paid.usecase";
 import { IController } from "./controller";
@@ -11,6 +12,8 @@ export class OrderPaidController implements IController<TOrderPaidController> {
     ) {}
 
     async execute(request: TOrderPaidController): Promise<HandlerResponse> {
+        Logger.info("OrderController.order executed!");
+        Logger.info("OrderController.order executed!", JSON.stringify(request));
         await this.orderPaidUseCase.execute(request);
         return {
             statusCode: 200,

@@ -1,3 +1,4 @@
+import { Logger } from "../infra/utils/logger";
 import { IOrder } from "../model/order.interface";
 import { IOrderCreatedUseCase } from "../usecase/order/order-created/order-created.usecase";
 import { IController } from "./controller";
@@ -11,6 +12,8 @@ export class OrderCreatedController implements IController<TOrderCreatedControll
     ) {}
 
     async execute(body: TOrderCreatedController): Promise<HandlerResponse> {
+        Logger.info("OrderController.order executed!");
+        Logger.info("OrderController.order executed!", JSON.stringify(body));
         await this.orderCreatedUseCase.execute(body)
 
         return {
