@@ -9,10 +9,10 @@ resource "aws_lambda_function" "order_lambda" {
   environment {
     variables = {
       SQS_URL         = aws_sqs_queue.order_queue.url
-      ORDER_URL       = data.terraform_remote_state.order-service.order_service_api_url
-      INVENTORY_URL   = data.terraform_remote_state.inventory-service.inventory_service_api_url
-      PAYMENT_URL     = data.terraform_remote_state.payment-service.payment_service_api_url
-      QUEUE_URL       = data.terraform_remote_state.queue-service.queue_service_api_url
+      ORDER_URL       = data.terraform_remote_state.order-service.outputs.order_service_api_url
+      INVENTORY_URL   = data.terraform_remote_state.inventory-service.outputs.inventory_service_api_url
+      PAYMENT_URL     = data.terraform_remote_state.payment-service.outputs.payment_service_api_url
+      QUEUE_URL       = data.terraform_remote_state.queue-service.outputs.queue_service_api_url
     }
   }
 }
