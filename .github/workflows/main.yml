@@ -44,10 +44,11 @@ jobs:
           export TF_LOG=DEBUG
           terraform init \
             -backend-config="bucket=${{ vars.TF_MAIN_BUCKET_NAME }}" \
-            -backend-config="key=lamda-order-service/terraform.tfstate" \
+            -backend-config="key=lambda-order-service/terraform.tfstate" \
             -backend-config="region=us-west-2" \
             -backend-config="encrypt=true"
 
       - name: Terraform Apply
         working-directory: ./devops/terraform
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve \
+              -var "aws_bucket_name=${{ vars.TF_MAIN_BUCKET_NAME }}" \
