@@ -1,4 +1,4 @@
-data "terraform_remote_state" "order" {
+data "terraform_remote_state" "order-service" {
   backend = "s3"
   config = {
     bucket = var.aws_bucket_name
@@ -7,7 +7,7 @@ data "terraform_remote_state" "order" {
   }
 }
 
-data "terraform_remote_state" "inventory" {
+data "terraform_remote_state" "inventory-service" {
   backend = "s3"
   config = {
     bucket = var.aws_bucket_name
@@ -16,7 +16,7 @@ data "terraform_remote_state" "inventory" {
   }
 }
 
-data "terraform_remote_state" "payment" {
+data "terraform_remote_state" "payment-service" {
   backend = "s3"
   config = {
     bucket = var.aws_bucket_name
@@ -25,7 +25,7 @@ data "terraform_remote_state" "payment" {
   }
 }
 
-data "terraform_remote_state" "queue" {
+data "terraform_remote_state" "queue-service" {
   backend = "s3"
   config = {
     bucket = var.aws_bucket_name
