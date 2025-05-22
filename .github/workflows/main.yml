@@ -50,5 +50,6 @@ jobs:
 
       - name: Terraform Apply
         working-directory: ./devops/terraform
-        run: terraform apply -auto-approve \
-              -var "aws_bucket_name=${{ vars.TF_MAIN_BUCKET_NAME }}" \
+        run:  |
+          terraform apply -auto-approve \
+            -var "aws_bucket_name=${{ vars.TF_MAIN_BUCKET_NAME }}" \
