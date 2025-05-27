@@ -23,7 +23,7 @@ export class PaymentServiceAdapter implements IPaymentServiceAdapter {
             orderId,
         })
 
-        if (result.status !== 200) {
+        if (result.status !== 201) {
             throw new Error(`Error creating payment: ${result.statusText}`);
         }
     }
