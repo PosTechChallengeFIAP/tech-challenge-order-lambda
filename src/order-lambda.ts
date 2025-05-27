@@ -4,6 +4,7 @@ import { Logger } from "./infra/utils/logger";
 import { OrderCreatedFactory } from "./factories/OrderCreatedFactory";
 import { OrderPaidController } from "./controllers/order.paid.controller";
 import { UpdateOrderController } from "./controllers/update.order.controller";
+import { OrderCreatedController } from "./controllers/order.created.controller";
 
 enum EOrderRoutes {
     ORDER_CREATED = 'proccess.order.created',
@@ -19,9 +20,9 @@ export class OrderLambda {
         const body = JSON.parse(record.body);
         const { type, data } = body;
 
-        const orderCreatedController = OrderCreatedFactory.create()
+        const orderCreatedController = new OrderCreatedController()
         const orderPaidController = new OrderPaidController()
-        const updateOrderController = new UpdateOrderController(); // Placeholder for UpdateOrderController
+        const updateOrderController = new UpdateOrderController();
 
         const router = new Router();
         router.use(EOrderRoutes.ORDER_CREATED,orderCreatedController.execute.bind(orderCreatedController));

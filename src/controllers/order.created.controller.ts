@@ -1,6 +1,6 @@
 import { Logger } from "../infra/utils/logger";
 import { IOrder } from "../model/order.interface";
-import { IOrderCreatedUseCase } from "../usecase/order/order-created/order-created.usecase";
+import { IOrderCreatedUseCase, OrderCreatedUseCase } from "../usecase/order/order-created/order-created.usecase";
 import { IController } from "./controller";
 import { HandlerResponse } from "./router";
 
@@ -8,7 +8,7 @@ type TOrderCreatedController = IOrder;
 
 export class OrderCreatedController implements IController<TOrderCreatedController> {
     constructor(
-        private readonly orderCreatedUseCase: IOrderCreatedUseCase
+        private readonly orderCreatedUseCase: IOrderCreatedUseCase = new OrderCreatedUseCase()
     ) {}
 
     async execute(body: TOrderCreatedController): Promise<HandlerResponse> {
