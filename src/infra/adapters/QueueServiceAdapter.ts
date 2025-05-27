@@ -21,7 +21,7 @@ export class QueueServiceAdapter implements IQueueServiceAdapter {
     async createItemQueue(itemQueue: IItemQueueToCreate): Promise<void> {
         const result = await this.queueRequester.post('/queue-item', itemQueue)
 
-        if (result.status !== 200) {
+        if (result.status !== 201) {
             throw new Error(`Error creating item queue: ${result.statusText}`);
         }
     }
