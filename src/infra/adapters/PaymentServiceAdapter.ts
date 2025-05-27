@@ -18,7 +18,7 @@ export class PaymentServiceAdapter implements IPaymentServiceAdapter {
     }
 
     async createPayment(value: number, orderId: number): Promise<void> {
-        const result = await this.paymentRequester.post('/payment', {
+        const result = await this.paymentRequester.post('/payments', {
             value,
             orderId,
         })
