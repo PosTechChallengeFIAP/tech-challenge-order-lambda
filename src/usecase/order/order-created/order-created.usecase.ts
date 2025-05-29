@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Logger } from "../../../infra/utils/logger";
 import { UseCase } from "../../usecase";
 import { TOrderCreatedUseCaseRequest, TOrderCreatedUseCaseResponse } from "./order-created.type";

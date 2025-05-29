@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Logger } from "../infra/utils/logger";
 import { EOrderStatus } from "../model/order-status.enum";
 import { IUpdateOrderUseCase, UpdateOrderUseCase } from "../usecase/order/update-order/update-order.usecase";

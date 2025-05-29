@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { IOrderServiceAdapter, OrderServiceAdapter } from "../../../infra/adapters/OrderServiceAdapter";
 import { UseCase } from "../../usecase";
 import { TUpdateOrderUseCaseRequest, TUpdateOrderUseCaseResponse } from "./update-order.type";

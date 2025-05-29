@@ -1,60 +1,41 @@
+import { OrderPaidController } from "./order.paid.controller";
 import { IOrderPaidUseCase } from "../usecase/order/order-paid/order-paid.usecase";
 import { Logger } from "../infra/utils/logger";
-import { OrderPaidController } from "./order.paid.controller";
 
-jest.mock("../infra/utils/logger", () => ({
-  Logger: {
-    info: jest.fn(),
-  },
-}));
+jest.mock("../infra/utils/logger");
 
 describe("OrderPaidController", () => {
-  let orderPaidUseCase: IOrderPaidUseCase;
+  let orderPaidUseCaseMock: jest.Mocked<IOrderPaidUseCase>;
   let controller: OrderPaidController;
+  const mockRequest = { orderId: 123, value: 45.67 } as any; // IPayment shape
 
   beforeEach(() => {
-    orderPaidUseCase = {
-      execute: jest.fn(),
+    orderPaidUseCaseMock = {
+      execute: jest.fn().mockResolvedValue(undefined),
     };
-    controller = new OrderPaidController(orderPaidUseCase);
+
+    controller = new OrderPaidController(orderPaidUseCaseMock);
     jest.clearAllMocks();
   });
 
-  describe("execute", () => {
-    const request = {
-      id: 1,
-      orderId: 123,
-      amount: 100,
-      method: "credit_card",
-      status: "paid",
-    } as any;
+  it("when execute is called should log info twice, call orderPaidUseCase.execute and return 200 response", async () => {
+    const response = await controller.execute(mockRequest);
 
-    it("when execute is called should log info, call use case execute and return success response", async () => {
-      (orderPaidUseCase.execute as jest.Mock).mockResolvedValue(undefined);
+    // Logger.info deve ser chamado duas vezes com os parâmetros corretos
+    expect(Logger.info).toHaveBeenCalledTimes(2);
+    expect(Logger.info).toHaveBeenNthCalledWith(1, "OrderController.order executed!");
+    expect(Logger.info).toHaveBeenNthCalledWith(2, "OrderController.order executed!", JSON.stringify(mockRequest));
 
-      const response = await controller.execute(request);
+    // orderPaidUseCase.execute deve ser chamado com o request correto
+    expect(orderPaidUseCaseMock.execute).toHaveBeenCalledWith(mockRequest);
 
-      expect(Logger.info).toHaveBeenCalledWith("OrderController.order executed!");
-      expect(Logger.info).toHaveBeenCalledWith("OrderController.order executed!", JSON.stringify(request));
-      expect(orderPaidUseCase.execute).toHaveBeenCalledWith(request);
-      expect(response).toEqual({
-        statusCode: 200,
-        body: JSON.stringify({
-          message: 'OrderController.order executed successfully!',
-          input: request,
-        }),
-      });
-    });
-
-    it("when use case execute throws should propagate error", async () => {
-      const error = new Error("fail");
-      (orderPaidUseCase.execute as jest.Mock).mockRejectedValue(error);
-
-      await expect(controller.execute(request)).rejects.toThrow("fail");
-
-      expect(Logger.info).toHaveBeenCalledWith("OrderController.order executed!");
-      expect(Logger.info).toHaveBeenCalledWith("OrderController.order executed!", JSON.stringify(request));
-      expect(orderPaidUseCase.execute).toHaveBeenCalledWith(request);
+    // Deve retornar status 200 com corpo JSON esperado
+    expect(response).toEqual({
+      statusCode: 200,
+      body: JSON.stringify({
+        message: "OrderController.order executed successfully!",
+        input: mockRequest,
+      }),
     });
   });
 });

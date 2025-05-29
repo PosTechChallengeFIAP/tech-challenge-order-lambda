@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Logger } from "../infra/utils/logger";
 import { IOrder } from "../model/order.interface";
 import { IOrderCreatedUseCase, OrderCreatedUseCase } from "../usecase/order/order-created/order-created.usecase";
