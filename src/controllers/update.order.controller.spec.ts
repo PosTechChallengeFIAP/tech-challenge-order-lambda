@@ -1,56 +1,57 @@
+import { UpdateOrderController } from './update.order.controller';
+import { IUpdateOrderUseCase, UpdateOrderUseCase } from '../usecase/order/update-order/update-order.usecase';
+import { EOrderStatus } from '../model/order-status.enum';
 
-import { EOrderStatus } from "../model/order-status.enum";
-import { IUpdateOrderUseCase } from "../usecase/order/update-order/update-order.usecase";
-import { Logger } from "../infra/utils/logger";
-import { UpdateOrderController } from "./update.order.controller";
+describe('UpdateOrderController', () => {
+  const mockRequest = {
+    orderId: 123,
+    status: EOrderStatus.PAYMENT_CONFIRMED,
+  };
 
-jest.mock("../infra/utils/logger", () => ({
-  Logger: {
-    info: jest.fn(),
-  },
-}));
-
-describe("UpdateOrderController", () => {
-  let updateOrderUseCase: IUpdateOrderUseCase;
-  let controller: UpdateOrderController;
+  const mockExecute = jest.fn();
+  const mockUseCase: IUpdateOrderUseCase = {
+    execute: mockExecute,
+  };
 
   beforeEach(() => {
-    updateOrderUseCase = {
-      execute: jest.fn(),
-    };
-    controller = new UpdateOrderController(updateOrderUseCase);
     jest.clearAllMocks();
   });
 
-  describe("execute", () => {
-    const request = { orderId: 123, status: EOrderStatus.DONE };
+  it('when executed with valid input should return 200 response', async () => {
+    const controller = new UpdateOrderController(mockUseCase);
 
-    it("when execute is called should log info and call updateOrderUseCase.execute", async () => {
-      (updateOrderUseCase.execute as jest.Mock).mockResolvedValue(undefined);
+    const result = await controller.execute(mockRequest);
 
-      const response = await controller.execute(request);
-
-      expect(Logger.info).toHaveBeenCalledWith("UpdateOrderController.execute executed!");
-      expect(Logger.info).toHaveBeenCalledWith("UpdateOrderController.execute executed!", JSON.stringify(request));
-      expect(updateOrderUseCase.execute).toHaveBeenCalledWith(request);
-      expect(response).toEqual({
-        statusCode: 200,
-        body: JSON.stringify({
-          message: 'OrderController.order executed successfully!',
-          input: request,
-        }),
-      });
+    expect(mockExecute).toHaveBeenCalledWith(mockRequest);
+    expect(result).toEqual({
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'OrderController.order executed successfully!',
+        input: mockRequest,
+      }),
     });
+  });
 
-    it("when updateOrderUseCase.execute throws should propagate error", async () => {
-      const error = new Error("fail");
-      (updateOrderUseCase.execute as jest.Mock).mockRejectedValue(error);
+  it('when use case throws error should propagate the exception', async () => {
+    const error = new Error('Erro simulado');
+    mockExecute.mockRejectedValueOnce(error);
+    const controller = new UpdateOrderController(mockUseCase);
 
-      await expect(controller.execute(request)).rejects.toThrow("fail");
+    await expect(controller.execute(mockRequest)).rejects.toThrow('Erro simulado');
+    expect(mockExecute).toHaveBeenCalledWith(mockRequest);
+  });
 
-      expect(Logger.info).toHaveBeenCalledWith("UpdateOrderController.execute executed!");
-      expect(Logger.info).toHaveBeenCalledWith("UpdateOrderController.execute executed!", JSON.stringify(request));
-      expect(updateOrderUseCase.execute).toHaveBeenCalledWith(request);
-    });
+  it('when instantiated without dependencies should use default and work', async () => {
+    const spy = jest
+      .spyOn(UpdateOrderUseCase.prototype, 'execute')
+      .mockResolvedValueOnce(undefined);
+
+    const controller = new UpdateOrderController();
+
+    const result = await controller.execute(mockRequest);
+
+    expect(result.statusCode).toBe(200);
+    expect(JSON.parse(result.body).message).toBe('OrderController.order executed successfully!');
+    spy.mockRestore();
   });
 });

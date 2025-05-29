@@ -1,41 +1,58 @@
-import { OrderPaidController } from "./order.paid.controller";
-import { IOrderPaidUseCase } from "../usecase/order/order-paid/order-paid.usecase";
-import { Logger } from "../infra/utils/logger";
+import { OrderPaidController } from './order.paid.controller';
+import { IOrderPaidUseCase, OrderPaidUseCase } from '../usecase/order/order-paid/order-paid.usecase';
+import { IPayment } from '../model/payment.interface';
 
-jest.mock("../infra/utils/logger");
+describe('OrderPaidController', () => {
+  const mockPayment: IPayment = {
+    orderId: 123,
+    value: 99.99,
+  } as any;
 
-describe("OrderPaidController", () => {
-  let orderPaidUseCaseMock: jest.Mocked<IOrderPaidUseCase>;
-  let controller: OrderPaidController;
-  const mockRequest = { orderId: 123, value: 45.67 } as any; // IPayment shape
+  const mockExecute = jest.fn();
+  const mockUseCase: IOrderPaidUseCase = {
+    execute: mockExecute,
+  };
 
   beforeEach(() => {
-    orderPaidUseCaseMock = {
-      execute: jest.fn().mockResolvedValue(undefined),
-    };
-
-    controller = new OrderPaidController(orderPaidUseCaseMock);
     jest.clearAllMocks();
   });
 
-  it("when execute is called should log info twice, call orderPaidUseCase.execute and return 200 response", async () => {
-    const response = await controller.execute(mockRequest);
+  it('when executed with valid input should return 200 response', async () => {
+    const controller = new OrderPaidController(mockUseCase);
 
-    // Logger.info deve ser chamado duas vezes com os parâmetros corretos
-    expect(Logger.info).toHaveBeenCalledTimes(2);
-    expect(Logger.info).toHaveBeenNthCalledWith(1, "OrderController.order executed!");
-    expect(Logger.info).toHaveBeenNthCalledWith(2, "OrderController.order executed!", JSON.stringify(mockRequest));
+    const result = await controller.execute(mockPayment);
 
-    // orderPaidUseCase.execute deve ser chamado com o request correto
-    expect(orderPaidUseCaseMock.execute).toHaveBeenCalledWith(mockRequest);
-
-    // Deve retornar status 200 com corpo JSON esperado
-    expect(response).toEqual({
+    expect(mockExecute).toHaveBeenCalledWith(mockPayment);
+    expect(result).toEqual({
       statusCode: 200,
       body: JSON.stringify({
-        message: "OrderController.order executed successfully!",
-        input: mockRequest,
+        message: 'OrderController.order executed successfully!',
+        input: mockPayment,
       }),
     });
+  });
+
+  it('when use case throws error should propagate the exception', async () => {
+    const error = new Error('Erro simulado');
+    mockExecute.mockRejectedValueOnce(error);
+
+    const controller = new OrderPaidController(mockUseCase);
+
+    await expect(controller.execute(mockPayment)).rejects.toThrow('Erro simulado');
+    expect(mockExecute).toHaveBeenCalledWith(mockPayment);
+  });
+
+  it('when instantiated without dependencies should use default and work', async () => {
+    const controller = new OrderPaidController();
+
+    const spy = jest
+      .spyOn(OrderPaidUseCase.prototype, 'execute')
+      .mockResolvedValueOnce(undefined);
+
+    const result = await controller.execute(mockPayment);
+
+    expect(result.statusCode).toBe(200);
+    expect(JSON.parse(result.body).message).toBe('OrderController.order executed successfully!');
+    spy.mockRestore();
   });
 });

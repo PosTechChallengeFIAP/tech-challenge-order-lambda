@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import { Logger } from "../infra/utils/logger";
 import { IPayment } from "../model/payment.interface";
 import { IOrderPaidUseCase, OrderPaidUseCase } from "../usecase/order/order-paid/order-paid.usecase";

@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 
 import { Logger } from "../../../infra/utils/logger";
 import { UseCase } from "../../usecase";

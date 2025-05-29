@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 
 import { IOrderServiceAdapter, OrderServiceAdapter } from "../../../infra/adapters/OrderServiceAdapter";
 import { IQueueServiceAdapter, QueueServiceAdapter } from "../../../infra/adapters/QueueServiceAdapter";
