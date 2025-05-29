@@ -1,4 +1,3 @@
-
 import { IOrderServiceAdapter, OrderServiceAdapter } from "../../../infra/adapters/OrderServiceAdapter";
 import { IQueueServiceAdapter, QueueServiceAdapter } from "../../../infra/adapters/QueueServiceAdapter";
 import { IItemQueueToCreate } from "../../../model/item-queue-to-create.interface";
