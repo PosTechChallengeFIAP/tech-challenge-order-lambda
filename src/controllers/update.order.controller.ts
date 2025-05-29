@@ -1,6 +1,5 @@
 import { Logger } from "../infra/utils/logger";
 import { EOrderStatus } from "../model/order-status.enum";
-import { IPayment } from "../model/payment.interface";
 import { IUpdateOrderUseCase, UpdateOrderUseCase } from "../usecase/order/update-order/update-order.usecase";
 import { IController } from "./controller";
 import { HandlerResponse } from "./router";

@@ -1,12 +1,11 @@
 import { Context, SQSEvent } from "aws-lambda";
 import { Router } from "./controllers/router";
 import { Logger } from "./infra/utils/logger";
-import { OrderCreatedFactory } from "./factories/OrderCreatedFactory";
 import { OrderPaidController } from "./controllers/order.paid.controller";
 import { UpdateOrderController } from "./controllers/update.order.controller";
 import { OrderCreatedController } from "./controllers/order.created.controller";
 
-enum EOrderRoutes {
+export enum EOrderRoutes {
     ORDER_CREATED = 'proccess.order.created',
     ORDER_PAID = 'proccess.order.paid',
     UPDATE_ORDER = 'proccess.update.order'
